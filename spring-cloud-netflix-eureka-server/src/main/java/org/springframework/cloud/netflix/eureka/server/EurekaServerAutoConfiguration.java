@@ -81,6 +81,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @PropertySource("classpath:/eureka/server.properties")
 public class EurekaServerAutoConfiguration implements WebMvcConfigurer {
 
+	/*
+
+	 */
+
 	/**
 	 * List of packages containing Jersey resources required by the Eureka server.
 	 */

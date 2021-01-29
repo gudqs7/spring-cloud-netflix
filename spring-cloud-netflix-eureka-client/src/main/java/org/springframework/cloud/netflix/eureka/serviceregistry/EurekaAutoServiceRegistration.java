@@ -65,6 +65,7 @@ public class EurekaAutoServiceRegistration
 
 	@Override
 	public void start() {
+		// 在应用 refresh()->finishedRefresh() 时, 自动注册 registration 到 server, 并发布事件相应事件
 		// only set the port if the nonSecurePort or securePort is 0 and this.port != 0
 		if (this.port.get() != 0) {
 			if (this.registration.getNonSecurePort() == 0) {
@@ -89,6 +90,7 @@ public class EurekaAutoServiceRegistration
 
 	@Override
 	public void stop() {
+		// 在容器 close() 时, 自动注销
 		this.serviceRegistry.deregister(this.registration);
 		this.running.set(false);
 	}
@@ -127,6 +129,7 @@ public class EurekaAutoServiceRegistration
 
 	@Override
 	public void onApplicationEvent(ApplicationEvent event) {
+		// 接收容器的生命周期事件, 做出相应的处理.
 		if (event instanceof WebServerInitializedEvent) {
 			onApplicationEvent((WebServerInitializedEvent) event);
 		}
@@ -140,6 +143,7 @@ public class EurekaAutoServiceRegistration
 		String contextName = event.getApplicationContext().getServerNamespace();
 		if (contextName == null || !contextName.equals("management")) {
 			int localPort = event.getWebServer().getPort();
+			// 在第一次接收时间时设置端口.
 			if (this.port.get() == 0) {
 				log.info("Updating port to " + localPort);
 				this.port.compareAndSet(0, localPort);

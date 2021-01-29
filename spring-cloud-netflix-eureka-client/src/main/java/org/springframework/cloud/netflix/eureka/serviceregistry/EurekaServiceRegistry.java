@@ -31,6 +31,10 @@ import static com.netflix.appinfo.InstanceInfo.InstanceStatus.UNKNOWN;
  */
 public class EurekaServiceRegistry implements ServiceRegistry<EurekaRegistration> {
 
+	/*
+		实现了注册/注销/更新状态功能, 但基本是从 EurekaRegistration 获取其他的对象完成的... 更像是一个代码中转
+	 */
+
 	private static final Log log = LogFactory.getLog(EurekaServiceRegistry.class);
 
 	@Override

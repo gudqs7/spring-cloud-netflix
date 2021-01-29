@@ -93,6 +93,16 @@ import static org.springframework.cloud.commons.util.IdUtils.getDefaultInstanceI
 		"org.springframework.cloud.client.serviceregistry.AutoServiceRegistrationAutoConfiguration" })
 public class EurekaClientAutoConfiguration {
 
+	/*
+		1.注册了一个 EurekaRegistration, 用于注册实例.. 但并没有调用(都是自动注册)
+		2.注册了一个 EurekaAutoServiceRegistration 自动注册实例的时机触发类
+		3.注册了一个 EurekaClient, 用于连接 Eureka server, 新建即自动注册实例
+		4.注册了一个 ApplicationInfoManager 管理状态监听
+		5.
+
+
+	 */
+
 	private ConfigurableEnvironment env;
 
 	public EurekaClientAutoConfiguration(ConfigurableEnvironment env) {
@@ -251,6 +261,10 @@ public class EurekaClientAutoConfiguration {
 		public EurekaRegistration eurekaRegistration(EurekaClient eurekaClient,
 				CloudEurekaInstanceConfig instanceConfig, ApplicationInfoManager applicationInfoManager,
 				@Autowired(required = false) ObjectProvider<HealthCheckHandler> healthCheckHandler) {
+			// 注册了一个 EurekaRegistration, 持有好几个有用的对象
+			//    CloudEurekaInstanceConfig: 配置文件的配置对象
+			//    ApplicationInfoManager: 管理和触发状态变更事件
+			//    EurekaClient: 与 Eureka server 通信, 获取 ServiceInstance
 			return EurekaRegistration.builder(instanceConfig).with(applicationInfoManager).with(eurekaClient)
 					.with(healthCheckHandler).build();
 		}
